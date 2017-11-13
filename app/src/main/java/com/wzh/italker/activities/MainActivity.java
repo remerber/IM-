@@ -1,5 +1,7 @@
 package com.wzh.italker.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -102,7 +104,7 @@ public class MainActivity extends BaseActivity implements NavHelper.OnTabChanged
 
     @OnClick(R.id.btn_action)
     void onActionClick() {
-
+        AccountActivity.show(this);
     }
 
 
@@ -145,5 +147,9 @@ public class MainActivity extends BaseActivity implements NavHelper.OnTabChanged
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return mNavHelper.performClickMenu(item.getItemId());
+    }
+
+    public static void show(Context context) {
+        context.startActivity(new Intent(context, MainActivity.class));
     }
 }

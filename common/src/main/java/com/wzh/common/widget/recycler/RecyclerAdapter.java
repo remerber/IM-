@@ -188,9 +188,22 @@ public abstract class RecyclerAdapter<T>
     }
 
     @Override
+    public void update(T t, ViewHolder<T> holder) {
+        //得到当前ViewHolder的坐标
+        int pos = holder.getAdapterPosition();
+        if (pos >= 0) {
+            //进行数据的移除和更新
+            mDataList.remove(pos);
+            mDataList.add(pos, t);
+            notifyItemChanged(pos);
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         ViewHolder viewHolder = (ViewHolder) v.getTag(R.id.tag_recycler_holder);
         if (this.mListener != null) {
+
             // 得到ViewHolder当前对应的适配器中的坐标
             int pos = viewHolder.getAdapterPosition();
             // 回掉方法
@@ -275,6 +288,23 @@ public abstract class RecyclerAdapter<T>
             if (this.callback != null) {
                 this.callback.update(data, this);
             }
+        }
+    }
+    /**
+     * 对回调接口做一次实现AdapterListener
+     *
+     * @param <T>
+     */
+    public static abstract class AdapterListenerImpl<T> implements AdapterListener<T> {
+
+        @Override
+        public void onItemClick(ViewHolder holder, T data) {
+
+        }
+
+        @Override
+        public void onItemLongClick(ViewHolder holder, T data) {
+
         }
     }
 }
