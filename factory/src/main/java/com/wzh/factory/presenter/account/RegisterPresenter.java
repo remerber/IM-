@@ -8,7 +8,7 @@ import com.wzh.factory.R;
 import com.wzh.factory.data.DataSource;
 import com.wzh.factory.data.helper.AccountHelper;
 import com.wzh.factory.model.api.account.RegisterModel;
-import com.wzh.factory.model.card.UserCard;
+import com.wzh.factory.model.db.User;
 import com.wzh.factory.presenter.BasePresenter;
 
 import net.qiujuer.genius.kit.handler.Run;
@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 public class RegisterPresenter extends BasePresenter<RegisterContract.View>
         implements RegisterContract.Presenter,
-        DataSource.Callback<UserCard> {
+        DataSource.Callback<User> {
 
 
     public RegisterPresenter(RegisterContract.View view) {
@@ -54,6 +54,7 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View>
             AccountHelper.register(model, this);
         }
 
+
     }
 
     @Override
@@ -62,13 +63,27 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View>
     }
 
     @Override
-    public void onDataLoaded(UserCard userCard) {
-
+    public void onDataLoaded(User user) {
+// 当网络请求成功，注册好了，回送一个用户信息回来
+        // 告知界面，注册成功
+        final RegisterContract.View view = getView();
+        if (view == null) {
+            return;
+        }
+        // 此时是从网络回送回来的，并不保证处于主现场状态
+        // 强制执行在主线程中
+        Run.onUiAsync(new Action() {
+            @Override
+            public void call() {
+                // 调用主界面注册成功
+                view.registerSuccess();
+            }
+        });
     }
 
     @Override
     public void onDataNotAvailable(@StringRes final int strRes) {
-         //网络请求告知注册失败
+        //网络请求告知注册失败
         final RegisterContract.View view = getView();
         if (view == null) {
             return;
@@ -76,7 +91,7 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View>
         Run.onUiAsync(new Action() {
             @Override
             public void call() {
-              //调用主界面显示注册失败
+                //调用主界面显示注册失败
                 view.showError(strRes);
             }
 

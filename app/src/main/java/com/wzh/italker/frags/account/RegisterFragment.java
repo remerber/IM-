@@ -8,6 +8,7 @@ import com.wzh.common.app.PresenterFragment;
 import com.wzh.factory.presenter.account.RegisterContract;
 import com.wzh.factory.presenter.account.RegisterPresenter;
 import com.wzh.italker.R;
+import com.wzh.italker.activities.MainActivity;
 
 import net.qiujuer.genius.ui.widget.Button;
 import net.qiujuer.genius.ui.widget.Loading;
@@ -66,11 +67,11 @@ public class RegisterFragment extends PresenterFragment<RegisterContract.Present
     }
 
     @OnClick(R.id.btn_submit)
-    void onSubmitClick(){
-        String phone=mPhone.getText().toString();
-        String name=mName.getText().toString();
-        String password=mPassword.getText().toString();
-        mPresenter.register(phone,name,password);
+    void onSubmitClick() {
+        String phone = mPhone.getText().toString();
+        String name = mName.getText().toString();
+        String password = mPassword.getText().toString();
+        mPresenter.register(phone, name, password);
 
     }
 
@@ -109,6 +110,8 @@ public class RegisterFragment extends PresenterFragment<RegisterContract.Present
     @Override
     public void registerSuccess() {
 
+        MainActivity.show(getContext());
+        getActivity().finish();
     }
 
 }

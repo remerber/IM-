@@ -16,13 +16,20 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        mavenCentral()
+        maven { url "https://www.jitpack.io" }
+        //个推私有Maven URL地址
+        //Maven URL地址
+        maven {
+            url "http://mvn.gt.igexin.com/nexus/content/repositories/releases/"
+        }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-ext{
+ext {
     // 版本号相关
     versionCode = 1;
     versionName = '1.0.0'
@@ -37,5 +44,8 @@ ext{
     easyPMVersion = "0.3.0"
     ossVersion = '2.3.0'
     ucropVersion = "2.2.0-native"
-
+    gsonVersion = '2.8.0'
+    retrofitVersion = '2.1.0'
+    getuiVersion = '2.9.3.0'
+    dbflowVersion = "4.0.0-beta7"
 }

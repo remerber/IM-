@@ -68,8 +68,8 @@ public abstract class BaseActivity extends AppCompatActivity {
      *
      * @return 资源文件id
      */
-    protected abstract int getContentLayoutId();
 
+    protected  abstract  int getContentLayoutId();
 
     @Override
     public void onBackPressed() {
