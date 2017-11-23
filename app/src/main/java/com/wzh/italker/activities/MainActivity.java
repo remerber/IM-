@@ -3,6 +3,7 @@ package com.wzh.italker.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
@@ -19,6 +20,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.wzh.common.app.BaseActivity;
 import com.wzh.common.widget.PortraitView;
+import com.wzh.factory.persistence.Account;
 import com.wzh.italker.R;
 import com.wzh.italker.frags.main.ActiveFragment;
 import com.wzh.italker.frags.main.ContactFragment;
@@ -86,6 +88,17 @@ public class MainActivity extends BaseActivity implements NavHelper.OnTabChanged
                         this.view.setBackground(resource.getCurrent());
                     }
                 });
+    }
+
+    @Override
+    protected boolean initArgs(Bundle bundle) {
+        if (Account.isComplete()) {
+            //完全则走正常流程
+            return super.initArgs(bundle);
+        } else {
+            UserActivity.show(this);
+            return false;
+        }
     }
 
     @Override

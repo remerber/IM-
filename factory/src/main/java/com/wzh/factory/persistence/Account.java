@@ -55,6 +55,19 @@ public class Account {
         return !TextUtils.isEmpty(userId) && !TextUtils.isEmpty(token);
     }
 
+    /**
+     * 是否完成了用户完善
+     * @return
+     */
+    public static  boolean isComplete(){
+        if (isLogin()) {
+            User self = getUser();
+            return !TextUtils.isEmpty(self.getDesc())
+                    && !TextUtils.isEmpty(self.getPortrait())
+                    && self.getSex() != 0;
+        }
+        return false;
+    }
 
     /**
      * 设置绑定状态

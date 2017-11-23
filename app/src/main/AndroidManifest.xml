@@ -58,6 +58,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.UserActivity"
+            android:label="@string/title_activity_user"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Account" />
+
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package com.wzh.factory.model.card;
 
+import com.wzh.factory.model.db.User;
+
 import java.util.Date;
 
 /**
@@ -106,5 +108,32 @@ public class UserCard {
         this.modifyAt = modifyAt;
     }
 
+    /**
+     * 缓存对应的User，不能被Gson框架解析使用
+     *
+     * @return
+     */
+    private transient User user;
+
+    public User build() {
+
+        if (user == null) {
+            User user = new User();
+            user.setId(id);
+            user.setName(name);
+            user.setPortrait(portrait);
+            user.setPhone(phone);
+            user.setDesc(desc);
+            user.setSex(sex);
+            user.setFollow(isFollow);
+            user.setFollows(follows);
+            user.setFollowing(following);
+            user.setModifyAt(modifyAt);
+            this.user = user;
+        }
+        return user;
+
+    }
 
 }
+
