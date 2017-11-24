@@ -112,12 +112,14 @@ public class MainActivity extends BaseActivity implements NavHelper.OnTabChanged
 
     @OnClick(R.id.im_search)
     void onSearchMenuClick() {
-
+        int type = Objects.equals(mNavHelper.getCurrentTab().extra, R.string.title_group) ?
+                SearchActivity.TYPE_GROUP : SearchActivity.TYPE_USER;
+        SearchActivity.show(this, type);
     }
 
     @OnClick(R.id.btn_action)
     void onActionClick() {
-        AccountActivity.show(this);
+
     }
 
 

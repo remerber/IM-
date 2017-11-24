@@ -10,6 +10,8 @@ import com.wzh.factory.model.db.User;
 import com.wzh.factory.net.NetWork;
 import com.wzh.factory.net.RemoteService;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,6 +24,8 @@ import retrofit2.Response;
 
 public class UserHelper {
 
+
+    // 更新用户信息的操作，异步的
     public static void update(UserUpdateModel model, final DataSource.Callback<UserCard> callback) {
         RemoteService service = NetWork.remote();
         Call<RspModel<UserCard>> call = service.userUpdate(model);
@@ -50,6 +54,34 @@ public class UserHelper {
         });
 
 
+    }
+
+
+    // 搜索的方法
+    public static Call search(String name, final DataSource.Callback<List<UserCard>> callback) {
+        RemoteService service = NetWork.remote();
+        Call<RspModel<List<UserCard>>> call = service.userSearch(name);
+
+        call.enqueue(new Callback<RspModel<List<UserCard>>>() {
+            @Override
+            public void onResponse(Call<RspModel<List<UserCard>>> call, Response<RspModel<List<UserCard>>> response) {
+                RspModel<List<UserCard>> rspModel = response.body();
+                if (rspModel.success()) {
+                    // 返回数据
+                    callback.onDataLoaded(rspModel.getResult());
+                } else {
+                    Factory.decodeRspCode(rspModel, callback);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RspModel<List<UserCard>>> call, Throwable t) {
+                callback.onDataNotAvailable(R.string.data_network_error);
+            }
+        });
+
+        // 把当前的调度者返回
+        return call;
     }
 
 }

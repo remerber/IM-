@@ -32,7 +32,7 @@ public class UploadHelper {
     private static OSS getClient() {
         // 明文设置secret的方式建议只在测试时使用，更多鉴权模式请参考后面的`访问控制`章节
         OSSCredentialProvider credentialProvider = new OSSPlainTextAKSKCredentialProvider(
-                "LTAIWW43sU0FGhnn", "XlxQYn3z5u7aNZ0kx8EGZdeTLsXqAd");
+                "LTAIWW43sU0FGhnn", "XlxQYn3z5u7aNZ0kx8EGZdeTLsXqAd ");
         return new OSSClient(Factory.app(), ENDPOINT, credentialProvider);
     }
 
@@ -87,17 +87,16 @@ public class UploadHelper {
         String key = getPortraitObjKey(path);
         return upload(key, path);
     }
-    // image/201703/dawewqfas243rfawr234.jpg
-    private static String getImageObjKey(String path) {
-        String fileMd5 = HashUtil.getMD5String(new File(path));
-        String dateString = getDateString();
-        return String.format("image/%s/%s.jpg", dateString, fileMd5);
-    }
-    // portrait/201703/dawewqfas243rfawr234.jpg
-    private static String getPortraitObjKey(String path) {
-        String fileMd5 = HashUtil.getMD5String(new File(path));
-        String dateString = getDateString();
-        return String.format("portrait/%s/%s.jpg", dateString, fileMd5);
+
+    /**
+     * 上传音频
+     *
+     * @param path 本地地址
+     * @return 服务器地址
+     */
+    public static String uploadAudio(String path) {
+        String key = getAudioObjKey(path);
+        return upload(key, path);
     }
 
     /**
@@ -109,7 +108,24 @@ public class UploadHelper {
         return DateFormat.format("yyyyMM", new Date()).toString();
     }
 
+    // image/201703/dawewqfas243rfawr234.jpg
+    private static String getImageObjKey(String path) {
+        String fileMd5 = HashUtil.getMD5String(new File(path));
+        String dateString = getDateString();
+        return String.format("image/%s/%s.jpg", dateString, fileMd5);
+    }
 
+    // portrait/201703/dawewqfas243rfawr234.jpg
+    private static String getPortraitObjKey(String path) {
+        String fileMd5 = HashUtil.getMD5String(new File(path));
+        String dateString = getDateString();
+        return String.format("portrait/%s/%s.jpg", dateString, fileMd5);
+    }
 
-
+    // audio/201703/dawewqfas243rfawr234.mp3
+    private static String getAudioObjKey(String path) {
+        String fileMd5 = HashUtil.getMD5String(new File(path));
+        String dateString = getDateString();
+        return String.format("audio/%s/%s.mp3", dateString, fileMd5);
+    }
 }
