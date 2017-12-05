@@ -1,14 +1,16 @@
 package com.wzh.factory.model.card;
 
+import com.wzh.factory.model.Author;
 import com.wzh.factory.model.db.User;
 
 import java.util.Date;
 
 /**
+ * 用户卡片，用于接收服务器返回
  * @author qiujuer Email:qiujuer@live.cn
  * @version 1.0.0
  */
-public class UserCard {
+public class UserCard implements Author {
     private String id;
     private String name;
     private String phone;
@@ -28,18 +30,22 @@ public class UserCard {
     // 用户信息最后的更新时间
     private Date modifyAt;
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
@@ -52,10 +58,12 @@ public class UserCard {
         this.phone = phone;
     }
 
+    @Override
     public String getPortrait() {
         return portrait;
     }
 
+    @Override
     public void setPortrait(String portrait) {
         this.portrait = portrait;
     }
@@ -108,15 +116,10 @@ public class UserCard {
         this.modifyAt = modifyAt;
     }
 
-    /**
-     * 缓存对应的User，不能被Gson框架解析使用
-     *
-     * @return
-     */
+    // 缓存一个对应的User, 不能被GSON框架解析使用ø
     private transient User user;
 
     public User build() {
-
         if (user == null) {
             User user = new User();
             user.setId(id);
@@ -132,8 +135,5 @@ public class UserCard {
             this.user = user;
         }
         return user;
-
     }
-
 }
-

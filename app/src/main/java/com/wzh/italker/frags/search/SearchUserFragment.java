@@ -1,6 +1,7 @@
 package com.wzh.italker.frags.search;
 
 
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,14 +15,23 @@ import com.wzh.common.widget.EmptyView;
 import com.wzh.common.widget.PortraitView;
 import com.wzh.common.widget.recycler.RecyclerAdapter;
 import com.wzh.factory.model.card.UserCard;
+import com.wzh.factory.presenter.contact.FollowContract;
+import com.wzh.factory.presenter.contact.FollowPresenter;
 import com.wzh.factory.presenter.search.SearchContract;
 import com.wzh.factory.presenter.search.SearchUserPresenter;
 import com.wzh.italker.R;
+import com.wzh.italker.activities.PersonalActivity;
 import com.wzh.italker.activities.SearchActivity;
+
+import net.qiujuer.genius.ui.Ui;
+import net.qiujuer.genius.ui.compat.UiCompat;
+import net.qiujuer.genius.ui.drawable.LoadingCircleDrawable;
+import net.qiujuer.genius.ui.drawable.LoadingDrawable;
 
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 
 /**
@@ -94,7 +104,8 @@ public class SearchUserFragment extends PresenterFragment<SearchContract.Present
     }
 
 
-    class ViewHolder extends RecyclerAdapter.ViewHolder<UserCard> {
+    class ViewHolder extends RecyclerAdapter.ViewHolder<UserCard>
+            implements FollowContract.View {
 
         @BindView(R.id.im_portrait)
         PortraitView mPortraitView;
@@ -105,16 +116,72 @@ public class SearchUserFragment extends PresenterFragment<SearchContract.Present
         @BindView(R.id.im_follow)
         ImageView mFollow;
 
+        private FollowContract.Presenter mPresenter;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            new FollowPresenter(this);
         }
 
         @Override
         protected void onBind(UserCard data) {
-            Glide.with(getActivity()).load(data.getPortrait()).into(mPortraitView);
+            mPortraitView.setup(Glide.with(SearchUserFragment.this), data);
             mName.setText(data.getName());
             mFollow.setEnabled(!data.isFollow());
+
+        }
+
+
+        @OnClick(R.id.im_portrait)
+        void onPortraitClick() {
+            PersonalActivity.show(getContext(), mData.getId());
+        }
+
+        @OnClick(R.id.im_follow)
+        void onFollowClick() {
+            //发起关注
+            mPresenter.follow(mData.getId());
+
+        }
+
+        @Override
+        public void showError(@StringRes int str) {
+            if (mFollow.getDrawable() instanceof LoadingDrawable) {
+                LoadingDrawable drawable = (LoadingDrawable) mFollow.getDrawable();
+                drawable.setProgress(1);
+                drawable.stop();
+            }
+        }
+
+        @Override
+        public void showLoading() {
+            int minSize = (int) Ui.dipToPx(getResources(), 22);
+            int maxSize = (int) Ui.dipToPx(getResources(), 30);
+            // 初始化一个圆形的动画的Drawable
+            LoadingDrawable drawable = new LoadingCircleDrawable(minSize, maxSize);
+            drawable.setBackgroundColor(0);
+
+            int[] color = new int[]{UiCompat.getColor(getResources(), R.color.white_alpha_208)};
+            drawable.setForegroundColor(color);
+            // 设置进去
+            mFollow.setImageDrawable(drawable);
+            // 启动动画
+            drawable.start();
+        }
+
+        @Override
+        public void setPresenter(FollowContract.Presenter presenter) {
+            mPresenter = presenter;
+        }
+
+        @Override
+        public void onFollowSucceed(UserCard userCard) {
+
+            if (mFollow.getDrawable() instanceof LoadingDrawable) {
+                ((LoadingDrawable) mFollow.getDrawable()).stop();
+                mFollow.setImageResource(R.drawable.sel_opt_done_add);
+            }
+            updateData(userCard);
 
         }
     }

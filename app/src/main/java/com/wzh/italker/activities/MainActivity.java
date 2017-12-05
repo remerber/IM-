@@ -108,6 +108,8 @@ public class MainActivity extends BaseActivity implements NavHelper.OnTabChanged
         //手动触发 点击一次
         Menu menu = mNavigation.getMenu();
         menu.performIdentifierAction(R.id.action_home, 0);
+        // 初始化头像加载
+        mPortrait.setup(Glide.with(this), Account.getUser());
     }
 
     @OnClick(R.id.im_search)
@@ -121,7 +123,10 @@ public class MainActivity extends BaseActivity implements NavHelper.OnTabChanged
     void onActionClick() {
 
     }
-
+    @OnClick(R.id.im_portrait)
+    void onPortraitClick() {
+        PersonalActivity.show(this, Account.getUserId());
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override

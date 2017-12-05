@@ -3,13 +3,13 @@ package com.wzh.factory.model.db;
 import com.raizlabs.android.dbflow.annotation.Database;
 
 /**
- * Created by HP on 2017/11/21.
+ * 数据库的基本信息
  *
- * @author by wangWei
+ * @author wang
+ * @version 1.0.0
  */
 @Database(name = AppDatabase.NAME, version = AppDatabase.VERSION)
 public class AppDatabase {
-
     public static final String NAME = "AppDatabase";
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 }

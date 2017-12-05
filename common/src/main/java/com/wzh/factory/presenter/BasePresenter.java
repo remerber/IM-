@@ -24,6 +24,7 @@ public class BasePresenter<T extends BaseContract.View> implements BaseContract.
 
     }
 
+
     /**
      * 给子类使用的获取View的操作
      * 不允许复写

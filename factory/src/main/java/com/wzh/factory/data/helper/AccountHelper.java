@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.wzh.factory.Factory;
 import com.wzh.factory.R;
 import com.wzh.factory.data.DataSource;
-import com.wzh.factory.model.api.RspModel;
+import com.wzh.factory.model.api.base.RspModel;
 import com.wzh.factory.model.api.account.AccountRspModel;
 import com.wzh.factory.model.api.account.LoginModel;
 import com.wzh.factory.model.api.account.RegisterModel;

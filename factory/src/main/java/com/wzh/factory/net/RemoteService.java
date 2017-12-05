@@ -1,6 +1,6 @@
 package com.wzh.factory.net;
 
-import com.wzh.factory.model.api.RspModel;
+import com.wzh.factory.model.api.base.RspModel;
 import com.wzh.factory.model.api.account.AccountRspModel;
 import com.wzh.factory.model.api.account.LoginModel;
 import com.wzh.factory.model.api.account.RegisterModel;
@@ -71,4 +71,28 @@ public interface RemoteService {
      */
     @GET("user/search/{name}")
     Call<RspModel<List<UserCard>>> userSearch(@Path("name") String name);
+
+    /**
+     * 用户关注的接口
+     *
+     * @param userId
+     * @return
+     */
+    @PUT("user/follow/{userId}")
+    Call<RspModel<UserCard>> userFollow(@Path("userId") String userId);
+
+    /**
+     * 获取联系人列表
+     * @return
+     */
+    @GET("user/contact")
+    Call<RspModel<List<UserCard>>> userContacts();
+
+    /**
+     * 获取联系人信息
+     * @param userId
+     * @return
+     */
+    @GET("user/{userId}")
+    Call<RspModel<UserCard>> userFind(@Path("userId") String userId);
 }

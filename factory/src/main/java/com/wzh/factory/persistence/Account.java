@@ -109,6 +109,16 @@ public class Account {
         return token;
     }
 
+
+    /**
+     * 返回用户Id
+     *
+     * @return 用户Id
+     */
+    public static String getUserId() {
+        return getUser().getId();
+    }
+
     /**
      * 存储数据到XML文件，持久化
      *

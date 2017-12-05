@@ -164,7 +164,14 @@ public abstract class RecyclerAdapter<T>
             notifyItemRangeInserted(startPos, dataList.size());
         }
     }
-
+    /**
+     * 返回整个集合
+     *
+     * @return List<Data>
+     */
+    public List<T> getItems() {
+        return mDataList;
+    }
     /**
      * 删除操作
      */
