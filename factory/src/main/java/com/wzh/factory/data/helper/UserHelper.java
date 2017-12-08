@@ -13,7 +13,6 @@ import com.wzh.factory.net.NetWork;
 import com.wzh.factory.net.RemoteService;
 import com.wzh.utils.CollectionUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -129,7 +128,7 @@ public class UserHelper {
                     public void onResponse(Call<RspModel<List<UserCard>>> call, Response<RspModel<List<UserCard>>> response) {
                         RspModel<List<UserCard>> rspModel = response.body();
                         if (rspModel.success()) {
-                            List<UserCard> cards = new ArrayList<UserCard>();
+                            List<UserCard> cards = rspModel.getResult();
                             if (cards == null || cards.size() == 0) {
                                 return;
                             }

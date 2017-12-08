@@ -163,7 +163,7 @@ public class PersonalActivity extends PresenterToolbarActivity<PersonalContract.
         if (user == null) {
             return;
         }
-        //TODO 发起聊天
+        MessageActivity.show(this, user);
     }
 
 }

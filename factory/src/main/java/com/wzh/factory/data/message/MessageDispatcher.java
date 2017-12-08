@@ -11,7 +11,6 @@ import com.wzh.factory.model.card.MessageCard;
 import com.wzh.factory.model.db.Group;
 import com.wzh.factory.model.db.Message;
 import com.wzh.factory.model.db.User;
-import com.wzh.utils.CollectionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,6 @@ import java.util.concurrent.Executors;
  */
 
 public class MessageDispatcher implements MessageCenter {
-
     private static MessageCenter instance;
     // 单线程池；处理卡片一个个的消息进行处理
     private final Executor executor = Executors.newSingleThreadExecutor();
@@ -34,8 +32,9 @@ public class MessageDispatcher implements MessageCenter {
     public static MessageCenter instance() {
         if (instance == null) {
             synchronized (UserDispatcher.class) {
-                if (instance == null)
+                if (instance == null) {
                     instance = new MessageDispatcher();
+                }
             }
         }
         return instance;
@@ -44,8 +43,12 @@ public class MessageDispatcher implements MessageCenter {
 
     @Override
     public void dispatch(MessageCard... cards) {
+        if (cards == null || cards.length == 0) {
+            return;
+        }
 
-
+        // 丢到单线程池中
+        executor.execute(new MessageCardHandler(cards));
     }
 
     /**
@@ -67,8 +70,9 @@ public class MessageDispatcher implements MessageCenter {
                 if (card == null || TextUtils.isEmpty(card.getSenderId())
                         || TextUtils.isEmpty(card.getId())
                         || (TextUtils.isEmpty(card.getReceiverId())
-                        && TextUtils.isEmpty(card.getGroupId())))
+                        && TextUtils.isEmpty(card.getGroupId()))) {
                     continue;
+                }
 
                 // 消息卡片有可能是推送过来的，也有可能是直接造的
                 // 推送来的代表服务器一定有，我们可以查询到（本地有可能有，有可能没有）
@@ -121,7 +125,7 @@ public class MessageDispatcher implements MessageCenter {
                 messages.add(message);
             }
             if (messages.size() > 0) {
-                DbHelper.save(Message.class, CollectionUtil.toArray(messages,Message.class));
+                DbHelper.save(Message.class, messages.toArray(new Message[0]));
             }
         }
     }

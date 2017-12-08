@@ -23,7 +23,7 @@ public abstract class BaseDbRepository<Data extends BaseDbModel<Data>> implement
 
     private Class<Data> dataClass;//当前泛型对应的真实的class信息
     private SucceedCallback<List<Data>> callback;
-    private final List<Data> dataList = new LinkedList<>(); // 当前缓存的数据
+    protected final List<Data> dataList = new LinkedList<>(); // 当前缓存的数据
 
     public BaseDbRepository() {
         // 拿当前类的范型数组信息
@@ -98,7 +98,7 @@ public abstract class BaseDbRepository<Data extends BaseDbModel<Data>> implement
      */
     private void insertOrUpdate(Data data) {
         int index = indexOf(data);
-        if (index > 0) {
+        if (index >= 0) {
             replace(index, data);
         } else {
             insert(data);
@@ -129,7 +129,9 @@ public abstract class BaseDbRepository<Data extends BaseDbModel<Data>> implement
             if (data.isSame(newData)) {
                 return index;
             }
+
         }
+
         return -1;
     }
 

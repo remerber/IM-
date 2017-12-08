@@ -105,7 +105,7 @@ public class Factory {
             switch (entity.type){
                 case PushModel.ENTITY_TYPE_LOGOUT:
                     instance.logout();
-                    // 退出情况下，直接返回，并且不可继续
+                    // 退出情况下，直接返回，
                     return;
 
                 case PushModel.ENTITY_TYPE_MESSAGE: {

@@ -25,7 +25,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--个推的广播注册-->
+        <!-- 个推的广播注册 -->
         <receiver
             android:name=".MessageReceiver"
             android:enabled="true"
@@ -39,9 +39,7 @@
         <activity
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Main">
-
-        </activity>
+            android:theme="@style/AppTheme.Main"></activity>
         <activity
             android:name=".activities.AccountActivity"
             android:theme="@style/AppTheme.Account" />
@@ -63,7 +61,6 @@
             android:label="@string/title_activity_user"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Account" />
-
         <activity
             android:name=".activities.SearchActivity"
             android:label="@string/title_search"
@@ -74,8 +71,11 @@
             android:label="@string/title_activity_personal"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.TransStatusBar" />
-
-
+        <activity
+            android:name=".activities.MessageActivity"
+            android:label="@string/title_activity_message"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Message" />
     </application>
 
 </manifest>

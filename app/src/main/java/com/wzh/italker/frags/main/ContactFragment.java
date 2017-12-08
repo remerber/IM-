@@ -15,6 +15,7 @@ import com.wzh.factory.model.db.User;
 import com.wzh.factory.presenter.contact.ContactContract;
 import com.wzh.factory.presenter.contact.ContactPresenter;
 import com.wzh.italker.R;
+import com.wzh.italker.activities.MessageActivity;
 import com.wzh.italker.activities.PersonalActivity;
 
 import butterknife.BindView;
@@ -57,6 +58,14 @@ public class ContactFragment extends PresenterFragment<ContactContract.Presenter
             @Override
             protected ViewHolder<User> onCreateViewHolder(View root, int viewType) {
                 return new ContactFragment.ViewHolder(root);
+            }
+        });
+        // 点击事件监听
+        mAdapter.setListener(new RecyclerAdapter.AdapterListenerImpl<User>() {
+            @Override
+            public void onItemClick(RecyclerAdapter.ViewHolder holder, User user) {
+                // 跳转到聊天界面
+                MessageActivity.show(getContext(), user);
             }
         });
 

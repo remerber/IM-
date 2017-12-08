@@ -1,10 +1,12 @@
 package com.wzh.factory.net;
 
-import com.wzh.factory.model.api.base.RspModel;
 import com.wzh.factory.model.api.account.AccountRspModel;
 import com.wzh.factory.model.api.account.LoginModel;
 import com.wzh.factory.model.api.account.RegisterModel;
+import com.wzh.factory.model.api.base.RspModel;
+import com.wzh.factory.model.api.message.MsgCreateModel;
 import com.wzh.factory.model.api.user.UserUpdateModel;
+import com.wzh.factory.model.card.MessageCard;
 import com.wzh.factory.model.card.UserCard;
 
 import java.util.List;
@@ -95,4 +97,12 @@ public interface RemoteService {
      */
     @GET("user/{userId}")
     Call<RspModel<UserCard>> userFind(@Path("userId") String userId);
+
+    /**
+     * 发送消息的接口
+     * @param model
+     * @return
+     */
+    @POST("msg")
+    Call<RspModel<MessageCard>> msgPush(@Body MsgCreateModel model);
 }
