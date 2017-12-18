@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import com.wzh.common.app.BaseActivity;
 import com.wzh.factory.model.Author;
 import com.wzh.factory.model.db.Group;
+import com.wzh.factory.model.db.Message;
 import com.wzh.factory.model.db.Session;
 import com.wzh.italker.R;
 import com.wzh.italker.frags.message.ChatGroupFragment;
@@ -61,6 +62,22 @@ public class MessageActivity extends BaseActivity {
         context.startActivity(intent);
     }
 
+    /**
+     * 最近会话
+     *
+     * @param context
+     * @param session
+     */
+    public static void show(Context context, Session session) {
+        if (context == null || session == null) {
+            return;
+        }
+        Intent intent = new Intent(context, MessageActivity.class);
+        intent.putExtra(KEY_RECEIVER_ID, session.getId());
+        intent.putExtra(KEY_RECEIVER_IS_GROUP, session.getReceiverType() == Message.RECEIVER_TYPE_GROUP);
+        context.startActivity(intent);
+    }
+
     @Override
     protected int getContentLayoutId() {
         return R.layout.activity_message;
@@ -95,7 +112,5 @@ public class MessageActivity extends BaseActivity {
 
     }
 
-    public static void show(Context context, Session session) {
 
-    }
 }

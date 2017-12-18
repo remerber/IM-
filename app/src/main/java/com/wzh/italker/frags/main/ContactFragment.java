@@ -21,7 +21,11 @@ import com.wzh.italker.activities.PersonalActivity;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-
+/**
+ * 联系人界面
+ *
+ * @author wang
+ */
 public class ContactFragment extends PresenterFragment<ContactContract.Presenter>
         implements ContactContract.View {
 
@@ -124,7 +128,7 @@ public class ContactFragment extends PresenterFragment<ContactContract.Presenter
         }
 
         @OnClick(R.id.im_portrait)
-        void onPortraitClick(){
+        void onPortraitClick() {
             PersonalActivity.show(getContext(), mData.getId());
         }
     }

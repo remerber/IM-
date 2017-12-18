@@ -21,6 +21,8 @@ import com.wzh.italker.activities.PersonalActivity;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+
+
 /**
  * 人聊天界面
  *
@@ -39,10 +41,9 @@ public class ChatUserFragment extends ChatFragment<User>
     }
 
     @Override
-    protected int getContentLayoutId() {
-        return R.layout.fragment_chat_user;
+    protected int getHeaderLayoutId() {
+        return R.layout.lay_chat_header_user;
     }
-
 
     @Override
     protected void initWidget(View root) {
@@ -123,7 +124,7 @@ public class ChatUserFragment extends ChatFragment<User>
 
 
                 menuItem.setVisible(true);
-                menuItem.getIcon().setAlpha((int) (255-255*progress));
+                menuItem.getIcon().setAlpha((int) (255 - 255 * progress));
 
             }
         }
@@ -145,5 +146,10 @@ public class ChatUserFragment extends ChatFragment<User>
         // 对和你聊天的朋友的信息进行初始化操作
         mPortrait.setup(Glide.with(this), user.getPortrait());
         mCollapsingLayout.setTitle(user.getName());
+
+        //TODO 发送聊天item滚动到最新
+        //TODO 添加关注后  显示发起聊天按钮
     }
+
 }
+

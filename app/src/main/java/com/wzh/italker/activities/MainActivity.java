@@ -121,7 +121,11 @@ public class MainActivity extends BaseActivity implements NavHelper.OnTabChanged
 
     @OnClick(R.id.btn_action)
     void onActionClick() {
-
+        if (Objects.equals(mNavHelper.getCurrentTab().extra, R.string.title_group)) {
+            GroupCreateActivity.show(this);
+        } else {
+            SearchActivity.show(this, SearchActivity.TYPE_USER);
+        }
     }
     @OnClick(R.id.im_portrait)
     void onPortraitClick() {
