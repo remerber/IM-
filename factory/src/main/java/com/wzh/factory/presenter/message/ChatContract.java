@@ -3,7 +3,10 @@ package com.wzh.factory.presenter.message;
 import com.wzh.factory.model.db.Group;
 import com.wzh.factory.model.db.Message;
 import com.wzh.factory.model.db.User;
+import com.wzh.factory.model.db.view.MemberUserModel;
 import com.wzh.factory.presenter.BaseContract;
+
+import java.util.List;
 
 /**
  * Created by HP on 2017/12/7.
@@ -20,7 +23,7 @@ public interface ChatContract {
         void pushText(String content);
 
 
-        void pushAudio(String path);
+        void pushAudio(String path, long time);
 
 
         void pushImages(String[] paths);
@@ -46,6 +49,10 @@ public interface ChatContract {
      * 群聊天界面
      */
     interface GroupView extends View<Group> {
+
+        void showAdminOption(boolean isAdmin);
+
+        void onInitGroupMembers(List<MemberUserModel> members, long moreCount);
 
     }
 }

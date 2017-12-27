@@ -57,9 +57,10 @@ public class Account {
 
     /**
      * 是否完成了用户完善
+     *
      * @return
      */
-    public static  boolean isComplete(){
+    public static boolean isComplete() {
         if (isLogin()) {
             User self = getUser();
             return !TextUtils.isEmpty(self.getDesc())
@@ -134,6 +135,15 @@ public class Account {
                 .putString(KEY_USER_ID, userId)
                 .putString(KEY_ACCOUNT, account)
                 .apply();
+    }
+
+    public static void clear(Context context) {
+        SharedPreferences sp = context.getSharedPreferences(Account.class.getName(), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.clear();
+        editor.commit();
+
+
     }
 
     /**

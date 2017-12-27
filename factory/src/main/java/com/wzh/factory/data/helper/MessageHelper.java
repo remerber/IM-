@@ -1,8 +1,15 @@
 package com.wzh.factory.data.helper;
 
 
+import android.os.SystemClock;
+import android.text.TextUtils;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.raizlabs.android.dbflow.sql.language.OperatorGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.wzh.Common;
+import com.wzh.common.app.BaseApplication;
 import com.wzh.factory.Factory;
 import com.wzh.factory.model.api.base.RspModel;
 import com.wzh.factory.model.api.message.MsgCreateModel;
@@ -11,6 +18,11 @@ import com.wzh.factory.model.db.Message;
 import com.wzh.factory.model.db.Message_Table;
 import com.wzh.factory.net.NetWork;
 import com.wzh.factory.net.RemoteService;
+import com.wzh.factory.net.UploadHelper;
+import com.wzh.utils.PicturesCompressor;
+import com.wzh.utils.StreamUtil;
+
+import java.io.File;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,11 +57,43 @@ public class MessageHelper {
                 }
 
 
-                // TODO 如果是文件类型的（语音，图片，文件），需要先上传后才发送
-
                 // 我们在发送的时候需要通知界面更新状态，Card;
                 final MessageCard card = model.buildCard();
                 Factory.getMessageCenter().dispatch(card);
+
+                // 如果是文件类型的（语音，图片，文件），需要先上传后才发送
+                if (card.getType() != Message.TYPE_STR) {
+                    if (!card.getContent().startsWith(UploadHelper.ENDPOINT)) {
+                        //没有上传到云服务器,还是手机本地文件
+                        String content;
+                        switch (card.getType()) {
+                            case Message.TYPE_PIC:
+                                content = uploadPicture(card.getContent());
+                                break;
+                            case Message.TYPE_AUDIO:
+                                content = uploadAudio(card.getContent());
+                                break;
+                            default:
+                                content = "";
+                                break;
+                        }
+                        if (TextUtils.isEmpty(content)) {
+                            // 失败
+                            card.setStatus(Message.STATUS_FAILED);
+                            Factory.getMessageCenter().dispatch(card);
+                            return;
+                        }
+                        //成功后把网络路径进行替换
+                        card.setContent(content);
+                        Factory.getMessageCenter().dispatch(card);
+
+                        model.refreshByCard();
+
+                    }
+
+
+                }
+
 
                 // 直接发送, 进行网络调度
                 RemoteService service = NetWork.remote();
@@ -82,7 +126,43 @@ public class MessageHelper {
         });
     }
 
+    /**
+     * 上传图片
+     *
+     * @param path
+     * @return
+     */
+    private static String uploadPicture(String path) {
+        File file = null;
+        try {
+            file = Glide.with(Factory.app())
+                    .load(path)
+                    .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                    .get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (file != null) {
+            String cacheDir = BaseApplication.getCacheDirFile().getAbsolutePath();
+            String tempFile = String.format("%s/image/Cache_%s.png", cacheDir, SystemClock.uptimeMillis());
+            PicturesCompressor.compressImage(file.getAbsolutePath(), tempFile, Common.Constance.MAX_UPLOAD_IMAGE_LENGTH);
+            String ossPath = UploadHelper.uploadImage(tempFile);
+            StreamUtil.delete(tempFile);
+            return ossPath;
+        }
 
+        return null;
+    }
+
+
+    private static String uploadAudio(String content) {
+
+        File file = new File(content);
+        if (!file.exists() || file.length() <= 0) {
+            return null;
+        }
+        return UploadHelper.uploadAudio(content);
+    }
 
     /**
      * 查询一个消息，这个消息是一个群中的最后一条消息

@@ -115,7 +115,7 @@ public class PersonalActivity extends PresenterToolbarActivity<PersonalContract.
         if (mFollowItem == null) {
             return;
         }
-        Drawable drawable = mIsFollowUser ? getResources().getDrawable(R.drawable.ic_favorite) :
+        Drawable drawable = mIsFollowUser ? getResources() .getDrawable(R.drawable.ic_favorite) :
                 getResources().getDrawable(R.drawable.ic_favorite_border);
         drawable = DrawableCompat.wrap(drawable);
         DrawableCompat.setTint(drawable, Resource.Color.WHITE);

@@ -16,6 +16,7 @@ import com.wzh.factory.model.db.view.MemberUserModel;
 import com.wzh.factory.presenter.message.ChatContract;
 import com.wzh.factory.presenter.message.ChatGroupPresenter;
 import com.wzh.italker.R;
+import com.wzh.italker.activities.GroupMemberActivity;
 import com.wzh.italker.activities.PersonalActivity;
 
 import java.util.List;
@@ -74,10 +75,9 @@ public class ChatGroupFragment extends ChatFragment<Group>
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     if(item.getItemId()==R.id.action_add){
-                        //Todo 添加好友
+                        GroupMemberActivity.showAdmin(getContext(), mReceiverId );
                         return  true;
                     }
-
                     return false;
                 }
             });
@@ -115,8 +115,7 @@ public class ChatGroupFragment extends ChatFragment<Group>
             mMemberMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // mReceiverId 就是群的Id   TOdo  群成员界面
-                    //GroupMemberActivity.show(getContext(), mReceiverId );
+                    GroupMemberActivity.show(getContext(), mReceiverId );
                 }
             });
         } else {

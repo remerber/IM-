@@ -1,5 +1,9 @@
 package com.wzh.common.app;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+
+import com.wzh.common.R;
 import com.wzh.factory.presenter.BaseContract;
 
 /**
@@ -13,6 +17,7 @@ public abstract class PresenterToolbarActivity<Presenter extends BaseContract.Pr
 
 
     protected Presenter mPresenter;
+    protected ProgressDialog mLoadingDialog;
 
     @Override
     protected void initBefore() {
@@ -33,6 +38,7 @@ public abstract class PresenterToolbarActivity<Presenter extends BaseContract.Pr
         // View中赋值Presenter
         mPresenter = presenter;
     }
+
     @Override
     public void showError(int str) {
         // 显示错误, 优先使用占位布局
@@ -47,12 +53,40 @@ public abstract class PresenterToolbarActivity<Presenter extends BaseContract.Pr
     public void showLoading() {
         if (mPlaceHolderView != null) {
             mPlaceHolderView.triggerLoading();
+        } else {
+
+            ProgressDialog dialog = mLoadingDialog;
+            if (dialog == null) {
+                dialog = new ProgressDialog(this, R.style.AppTheme_Dialog_Alert_Light);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.setCancelable(true);
+                dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        finish();
+                    }
+                });
+                mLoadingDialog = dialog;
+            }
+            dialog.setMessage(getText(R.string.prompt_loading));
+            dialog.show();
+
+
         }
     }
 
     protected void hideLoading() {
+        hideDialogLoading();
         if (mPlaceHolderView != null) {
             mPlaceHolderView.triggerOk();
+        }
+    }
+
+    protected void hideDialogLoading() {
+        ProgressDialog dialog = mLoadingDialog;
+        if (dialog != null) {
+            mLoadingDialog = null;
+            dialog.dismiss();
         }
     }
 
@@ -61,7 +95,7 @@ public abstract class PresenterToolbarActivity<Presenter extends BaseContract.Pr
     protected void onDestroy() {
         super.onDestroy();
         //界面关闭时进行销毁
-        if(mPresenter!=null){
+        if (mPresenter != null) {
             mPresenter.destroy();
         }
     }

@@ -105,6 +105,8 @@ public class GalleryView extends RecyclerView {
         }
         mSelectedImages.clear();
         mAdapter.notifyDataSetChanged();
+
+        notifySelectChanged();
     }
 
     @SuppressLint("StringFormatMatches")

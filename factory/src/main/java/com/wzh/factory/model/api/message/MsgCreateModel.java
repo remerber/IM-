@@ -58,6 +58,15 @@ public class MsgCreateModel {
         return receiverType;
     }
 
+    public void refreshByCard() {
+        if (card == null) {
+            return;
+        }
+        // 刷新内容和附件信息
+        this.content = card.getContent();
+        this.attach = card.getAttach();
+    }
+
 
     public static class Builder {
         private MsgCreateModel model;

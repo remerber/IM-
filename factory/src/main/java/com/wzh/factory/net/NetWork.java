@@ -26,59 +26,74 @@ public class NetWork {
 
     private static NetWork instance;
     private Retrofit retrofit;
+    private OkHttpClient client;
 
     static {
         instance = new NetWork();
     }
 
     private NetWork() {
-
     }
 
-    //构建一个Retrofit
+    public static OkHttpClient getClient() {
+        if (instance.client != null) {
+            return instance.client;
+        }
+
+        // 存储起来
+        instance.client = new OkHttpClient.Builder()
+                // 给所有的请求添加一个拦截器
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        // 拿到我们的请求
+                        Request original = chain.request();
+                        // 重新进行build
+                        Request.Builder builder = original.newBuilder();
+                        if (!TextUtils.isEmpty(Account.getToken())) {
+                            // 注入一个token
+                            builder.addHeader("token", Account.getToken());
+                        }
+                        builder.addHeader("Content-Type", "application/json");
+                        Request newRequest = builder.build();
+                        // 返回
+                        return chain.proceed(newRequest);
+                    }
+                })
+                .build();
+        return instance.client;
+    }
+
+
     public static Retrofit getRetrofit() {
-
-
         if (instance.retrofit != null) {
             return instance.retrofit;
         }
 
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new Interceptor() {
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
 
-                        //拿到我们的请求
-                        Request original = chain.request();
-                        //重新进行rebuild
-                        Request.Builder builder = original.newBuilder();
-                        if (!TextUtils.isEmpty(Account.getToken())) {
-                            //注入一个token
-                            builder.addHeader("token", Account.getToken());
-                        }
-                        builder.addHeader("Content-Type", "application/json");
-                        Request request = builder.build();
-                        return chain.proceed(request);
-                    }
-                })
-                .build();
+        OkHttpClient client = getClient();
+
 
         Retrofit.Builder builder = new Retrofit.Builder();
+
+        // 设置电脑链接
         instance.retrofit = builder.baseUrl(Common.Constance.API_URL)
+                // 设置client
                 .client(client)
+                // 设置Json解析器
                 .addConverterFactory(GsonConverterFactory.create(Factory.getGson()))
                 .build();
+
         return instance.retrofit;
 
     }
 
     /**
-     * 返回一个代理请求
+     * 返回一个请求代理
      *
-     * @return
+     * @return RemoteService
      */
     public static RemoteService remote() {
         return NetWork.getRetrofit().create(RemoteService.class);
     }
-
 }

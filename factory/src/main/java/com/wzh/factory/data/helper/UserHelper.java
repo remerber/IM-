@@ -9,8 +9,10 @@ import com.wzh.factory.model.api.user.UserUpdateModel;
 import com.wzh.factory.model.card.UserCard;
 import com.wzh.factory.model.db.User;
 import com.wzh.factory.model.db.User_Table;
+import com.wzh.factory.model.db.view.UserSampleModel;
 import com.wzh.factory.net.NetWork;
 import com.wzh.factory.net.RemoteService;
+import com.wzh.factory.persistence.Account;
 import com.wzh.utils.CollectionUtil;
 
 import java.util.List;
@@ -59,7 +61,14 @@ public class UserHelper {
     }
 
 
-    // 搜索的方法
+
+
+    /**
+     *  搜索的方法
+     * @param name
+     * @param callback
+     * @return
+     */
     public static Call search(String name, final DataSource.Callback<List<UserCard>> callback) {
         RemoteService service = NetWork.remote();
         Call<RspModel<List<UserCard>>> call = service.userSearch(name);
@@ -213,4 +222,19 @@ public class UserHelper {
         return user;
     }
 
+    /**
+     * 获取一个联系人列表，但是是一个简单的数据的
+     *
+     * @return
+     */
+    public static List<UserSampleModel> getSampleContact() {
+        return SQLite.select(User_Table.id.withTable().as("id"),
+                User_Table.name.withTable().as("name"),
+                User_Table.portrait.withTable().as("portrait"))
+                .from(User.class)
+                .where(User_Table.isFollow.eq(true))
+                .and(User_Table.id.notEq(Account.getUserId()))
+                .orderBy(User_Table.name, true)
+                .queryCustomList(UserSampleModel.class);
+    }
 }

@@ -4,8 +4,12 @@ import com.wzh.factory.model.api.account.AccountRspModel;
 import com.wzh.factory.model.api.account.LoginModel;
 import com.wzh.factory.model.api.account.RegisterModel;
 import com.wzh.factory.model.api.base.RspModel;
+import com.wzh.factory.model.api.group.GroupCreateModel;
+import com.wzh.factory.model.api.group.GroupMemberAddModel;
 import com.wzh.factory.model.api.message.MsgCreateModel;
 import com.wzh.factory.model.api.user.UserUpdateModel;
+import com.wzh.factory.model.card.GroupCard;
+import com.wzh.factory.model.card.GroupMemberCard;
 import com.wzh.factory.model.card.MessageCard;
 import com.wzh.factory.model.card.UserCard;
 
@@ -85,6 +89,7 @@ public interface RemoteService {
 
     /**
      * 获取联系人列表
+     *
      * @return
      */
     @GET("user/contact")
@@ -92,6 +97,7 @@ public interface RemoteService {
 
     /**
      * 获取联系人信息
+     *
      * @param userId
      * @return
      */
@@ -100,9 +106,71 @@ public interface RemoteService {
 
     /**
      * 发送消息的接口
+     *
      * @param model
      * @return
      */
     @POST("msg")
     Call<RspModel<MessageCard>> msgPush(@Body MsgCreateModel model);
+
+    /**
+     * 创建群
+     *
+     * @param model
+     * @return
+     */
+    @POST("group")
+    Call<RspModel<GroupCard>> groupCreate(@Body GroupCreateModel model);
+
+
+    /**
+     * 拉取群信息
+     *
+     * @param groupId
+     * @return
+     */
+    @GET("group/{groupId}")
+    Call<RspModel<GroupCard>> groupFind(@Path("groupId") String groupId);
+
+
+    /**
+     * 群搜索的接口
+     *
+     * @param name
+     * @return
+     */
+    @GET("group/search/{name}")
+    Call<RspModel<List<GroupCard>>> groupSearch(@Path(value = "name", encoded = true) String name);
+
+
+    /**
+     * 我的群列表
+     *
+     * @param date
+     * @return
+     */
+    @GET("group/list/{date}")
+    Call<RspModel<List<GroupCard>>> groups(@Path(value = "date", encoded = true) String date);
+
+
+    /**
+     * 我的群的成员列表
+     *
+     * @param groupId
+     * @return
+     */
+    @GET("group/{groupId}/member")
+    Call<RspModel<List<GroupMemberCard>>> groupMembers(@Path("groupId") String groupId);
+
+    /**
+     * 添加群成员
+     * @param
+     * @param model
+     * @return
+     */
+    @POST("group/{groupId}/member")
+    Call<RspModel<List<GroupMemberCard>>> groupMemberAdd(@Path("groupId") String groupId,
+                                                         @Body GroupMemberAddModel model);
+
+
 }

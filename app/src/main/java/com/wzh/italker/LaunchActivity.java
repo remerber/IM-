@@ -19,6 +19,7 @@ import com.wzh.italker.frags.assist.PermissionsFragment;
 import net.qiujuer.genius.res.Resource;
 import net.qiujuer.genius.ui.compat.UiCompat;
 
+
 /**
  * 欢迎界面
  *

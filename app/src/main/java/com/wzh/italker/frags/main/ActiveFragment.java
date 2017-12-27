@@ -3,6 +3,8 @@ package com.wzh.italker.frags.main;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -12,6 +14,7 @@ import com.wzh.common.app.PresenterFragment;
 import com.wzh.common.widget.EmptyView;
 import com.wzh.common.widget.PortraitView;
 import com.wzh.common.widget.recycler.RecyclerAdapter;
+import com.wzh.face.Face;
 import com.wzh.factory.model.db.Session;
 import com.wzh.factory.presenter.message.SessionContract;
 import com.wzh.factory.presenter.message.SessionPresenter;
@@ -122,7 +125,12 @@ public class ActiveFragment extends PresenterFragment<SessionContract.Presenter>
         protected void onBind(Session session) {
             mPortraitView.setup(Glide.with(ActiveFragment.this), session.getPicture());
             mName.setText(session.getTitle());
-            mContent.setText(TextUtils.isEmpty(session.getContent()) ? "" : session.getContent());
+            String str = TextUtils.isEmpty(session.getContent()) ? "" : session.getContent();
+            Spannable spannable = new SpannableString(str);
+            // 解析表情
+            Face.decode(mContent, spannable, (int) mContent.getTextSize());
+            // 把内容设置到布局上
+            mContent.setText(spannable);
             // mTime.setText(DateTimeUtil.getSampleDate(session.getModifyAt()));
         }
     }

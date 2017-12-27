@@ -95,6 +95,21 @@
             android:src="@drawable/ic_submit"
             android:tint="@color/textPrimary" />
     </LinearLayout>
+    <!-- id是固定的-->
+    <net.qiujuer.widget.airpanel.AirPanelFrameLayout
+        android:id="@id/airPanelSubLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_alpha_224"
+        android:visibility="gone">
+
+        <fragment
+            android:id="@+id/frag_panel"
+            class="com.wzh.italker.frags.panel.PanelFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </net.qiujuer.widget.airpanel.AirPanelFrameLayout>
 
 
 </com.wzh.common.widget.MessageLayout>

@@ -4,8 +4,11 @@ import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.wzh.factory.data.helper.GroupHelper;
+import com.wzh.factory.model.db.view.MemberUserModel;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -16,7 +19,7 @@ import java.util.Objects;
  * @version 1.0.0
  */
 @Table(database = AppDatabase.class)
-public class Group extends BaseDbModel<Group>  {
+public class Group extends BaseDbModel<Group> {
     @PrimaryKey
     private String id; // 群Id
     @Column
@@ -143,5 +146,30 @@ public class Group extends BaseDbModel<Group>  {
                 && Objects.equals(this.desc, oldT.desc)
                 && Objects.equals(this.picture, oldT.picture)
                 && Objects.equals(this.holder, oldT.holder);
+    }
+
+    private long groupMemberCount = -1;
+
+    /**
+     * 获得当前群成员的数量，使用内存缓存
+     *
+     * @return
+     */
+    public long getGroupMemberCount() {
+
+        if (groupMemberCount == -1) {
+            groupMemberCount = GroupHelper.getMemberCount(id);
+        }
+
+        return groupMemberCount;
+    }
+
+    private List<MemberUserModel> groupLatelyMembers;
+
+    public List<MemberUserModel> getLatelyGroupMembers() {
+        if (groupLatelyMembers == null || groupLatelyMembers.isEmpty()) {
+            groupLatelyMembers = GroupHelper.getMemberUsers(id, 4);
+        }
+        return groupLatelyMembers;
     }
 }

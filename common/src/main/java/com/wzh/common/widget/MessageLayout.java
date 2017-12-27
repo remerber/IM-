@@ -5,7 +5,8 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.widget.LinearLayout;
+
+import net.qiujuer.widget.airpanel.AirPanelLinearLayout;
 
 /**
  * Created by HP on 2017/12/7.
@@ -14,7 +15,7 @@ import android.widget.LinearLayout;
  */
 
 
-public class MessageLayout extends LinearLayout {
+public class MessageLayout extends AirPanelLinearLayout {
     public MessageLayout(Context context) {
         super(context);
     }

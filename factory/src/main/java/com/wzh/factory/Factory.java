@@ -267,6 +267,7 @@ public class Factory {
      */
     private void logout() {
 
+
     }
 
 }
